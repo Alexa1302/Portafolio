@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alexandra Sánchez · Desarrolladora de Software</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0A13;
+    --bg-alt: #15131F;
+    --panel: #17151F;
+    --ink: #F4F2ED;
+    --ink-soft: #9A97AF;
+    --line: #2A2739;
+    --white: #1D1A2C;
+    --on-accent: #FCFBFF;
+    --violet: #8C7BFA;
+    --violet-dark: #6C5CE7;
+    --teal: #2FD98A;
+    --coral: #FF8261;
+    --font-display: 'Sora', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* ambient aurora + grid texture, fixed behind all content */
+  body::before{
+    content:'';
+    position:fixed;
+    top:-10%; left:-10%; right:-10%; bottom:-10%;
+    z-index:-2;
+    background:
+      radial-gradient(680px 520px at 12% -6%, rgba(140,123,250,0.22), transparent 60%),
+      radial-gradient(620px 480px at 92% 10%, rgba(255,130,97,0.14), transparent 60%),
+      radial-gradient(560px 520px at 50% 92%, rgba(47,217,138,0.12), transparent 60%),
+      var(--bg);
+    animation: auroraDrift 28s ease-in-out infinite alternate;
+  }
+  @keyframes auroraDrift{
+    0%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(1.6%, -2%) scale(1.03); }
+    100%{ transform:translate(-1.8%, 1.6%) scale(1.02); }
+  }
+
+  #bg-nodes{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    display:block;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img{ max-width:100%; display:block; }
+
+  ::selection{ background:var(--violet); color:var(--on-accent); }
+
+  :focus-visible{
+    outline: 2px solid var(--violet);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(11,10,19,0.72);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 32px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:0.98rem;
+    letter-spacing:-0.02em;
+  }
+  .logo span{ color:var(--violet); }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:32px;
+    font-size:0.92rem;
+    font-weight:500;
+  }
+  .nav-links li{
+    display:flex;
+    align-items:center;
+  }
+  .nav-links a{
+    position:relative;
+    color:var(--ink-soft);
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:-4px;
+    width:0; height:2px;
+    background:var(--violet);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+  .btn-code.nav-cta{
+    padding:6px 14px;
+    font-size:0.76rem;
+    border-radius:7px;
+  }
+  .nav-toggle{ display:none; }
+
+  /* ---------- HERO ---------- */
+  #home.hero{
+    padding:132px 0 64px;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:56px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--teal);
+    background:rgba(47,217,138,0.09);
+    border:1px solid rgba(47,217,138,0.25);
+    padding:6px 14px;
+    border-radius:100px;
+    margin-bottom:24px;
+  }
+  .eyebrow .dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--teal);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(0.8); }
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-size:clamp(2.1rem, 4.4vw, 3.1rem);
+    font-weight:800;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(100deg, var(--violet), var(--coral));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.lead{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:480px;
+    margin-bottom:32px;
+  }
+  .hero-actions{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:0.95rem;
+    padding:13px 26px;
+    border-radius:100px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--white);
+  }
+  .btn-primary:hover{
+    background:var(--violet-dark);
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(108,92,231,0.25);
+  }
+  .btn-ghost{
+    border:1.5px solid var(--line);
+    color:var(--ink);
+    background:var(--white);
+  }
+  .btn-ghost:hover{
+    border-color:var(--ink);
+    transform:translateY(-2px);
+  }
+
+  /* hero CTA buttons: terminal-command styled with creative hover motion */
+  .btn-code{
+    position:relative;
+    font-family:var(--font-mono);
+    font-weight:500;
+    font-size:0.92rem;
+    padding:13px 24px;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    overflow:hidden;
+    isolation:isolate;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+  .btn-code::before{
+    content:'';
+    position:absolute;
+    top:0; left:-60%;
+    width:35%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.16), transparent);
+    transform:skewX(-18deg);
+    transition:left 0.65s ease;
+    z-index:1;
+  }
+  .btn-code:hover::before{ left:130%; }
+  .btn-code .tag-bracket{
+    color:var(--violet);
+    font-weight:600;
+    position:relative;
+    z-index:2;
+    transition:color 0.25s ease;
+  }
+  .btn-code .tag-name{
+    color:var(--ink);
+    position:relative;
+    z-index:2;
+  }
+
+  .btn-code-fill{
+    background:rgba(156,140,255,0.10);
+    border:1px solid rgba(156,140,255,0.4);
+    color:var(--ink);
+  }
+  .btn-code-fill:hover{
+    background:rgba(156,140,255,0.18);
+    border-color:var(--violet);
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px -14px rgba(140,123,250,0.55);
+  }
+  .btn-code-outline{
+    background:rgba(255,255,255,0.02);
+    border:1px solid var(--line);
+    color:var(--ink);
+  }
+  .btn-code-outline:hover{
+    border-color:var(--teal);
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px -14px rgba(47,217,138,0.4);
+  }
+  .btn-code-outline:hover .tag-bracket{ color:var(--teal); }
+
+  /* terminal card */
+  .terminal{
+    background:#1C1B29;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(156,140,255,0.06), 0 20px 60px -30px rgba(140,123,250,0.35);
+    border:1px solid #322F4A;
+  }
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    background:#222131;
+    border-bottom:1px solid #2C2A3D;
+  }
+  .terminal-bar .tdot{ width:10px; height:10px; border-radius:50%; }
+  .tdot.r{ background:#FF6259; }
+  .tdot.y{ background:#FFBD2E; }
+  .tdot.g{ background:#28C840; }
+  .terminal-title{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:#8B899E;
+    margin-left:6px;
+  }
+  .terminal-body{
+    padding:18px 22px;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    line-height:1.75;
+    letter-spacing:0.01em;
+    color:#D3D1E3;
+    min-height:90px;
+  }
+  .terminal-body .key{ color:#79E0C7; }
+  .terminal-body .str{ color:#FFB870; }
+  .terminal-body .punc{ color:#8B899E; }
+  .terminal-body .caret{
+    display:inline-block;
+    width:7px; height:1.1em;
+    background:var(--violet);
+    vertical-align:text-bottom;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ scroll-margin-top:60px; }
+  section.wrap{ padding-top:64px; padding-bottom:64px; }
+  #contacto.wrap{ padding-bottom:27px; }
+  .section-head{
+    margin-bottom:52px;
+    max-width:600px;
+  }
+  .section-tag{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--violet);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:12px;
+    display:block;
+  }
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:clamp(1.8rem, 3.4vw, 2.5rem);
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  #sobre-mi .section-head{ margin-bottom:28px; max-width:720px; }
+  #proyectos .section-head{ margin-bottom:64px; max-width:760px; }
+  #sobre-mi .section-head h2, #proyectos .section-head h2{ white-space:nowrap; }
+  @media (max-width: 860px){
+    #sobre-mi .section-head h2, #proyectos .section-head h2{ white-space:normal; }
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+  .about-bio p{
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin-bottom:18px;
+  }
+  .about-bio p strong{ color:var(--ink); }
+  .mini-terminal{
+    margin-top:24px;
+    background:#1C1B29;
+    border-radius:14px;
+    overflow:hidden;
+    border:1px solid #322F4A;
+    box-shadow:0 20px 45px -25px rgba(140,123,250,0.35);
+  }
+  .mini-terminal-body{
+    padding:18px 22px 20px;
+    font-family:var(--font-mono);
+    font-size:0.92rem;
+    line-height:1.9;
+    color:#D3D1E3;
+  }
+  .mini-terminal-body .line{ display:block; }
+  .mini-terminal-body .indent{ padding-left:22px; }
+  .mini-terminal-body .key{ color:#79E0C7; }
+  .mini-terminal-body .fn{ color:#9C8CFF; }
+  .mini-terminal-body .str{ color:#FFB870; }
+  .mini-terminal-body .punc{ color:#8B899E; }
+
+  .tl-creds{
+    margin-bottom:20px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid #322F4A;
+    background:#1C1B29;
+  }
+  .tl-creds-label{
+    padding:8px 14px;
+    font-family:var(--font-mono);
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#8B899E;
+    border-bottom:1px solid #2C2A3D;
+  }
+  .tl-creds-code{
+    padding:11px 14px 13px;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    line-height:1.75;
+    color:#D3D1E3;
+  }
+  .tl-creds-code .line{ display:block; }
+  .tl-creds-code .key{ color:#79E0C7; }
+  .tl-creds-code .str{ color:#FFB870; }
+  .tl-creds-code .punc{ color:#8B899E; }
+  .tl-creds-note{
+    display:block;
+    margin-top:8px;
+    margin-bottom:18px;
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    color:#6E6C82;
+  }
+  .skills-col h3{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:14px;
+  }
+  .skill-group{ margin-bottom:26px; }
+  .skill-group:last-child{ margin-bottom:0; }
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    padding:7px 13px;
+    border-radius:8px;
+    background:var(--white);
+    border:1px solid var(--line);
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+  .chip:hover{
+    border-color:var(--violet);
+    transform:translateY(-2px);
+  }
+
+  /* ---------- PROJECTS TIMELINE ---------- */
+  .timeline{
+    position:relative;
+    padding-left:40px;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:9px; top:8px; bottom:8px;
+    width:2px;
+    background:var(--line);
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:56px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-dot{
+    position:absolute;
+    left:-40px; top:6px;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--white);
+    border:2px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.3s ease, background 0.3s ease;
+  }
+  .tl-dot::after{
+    content:'';
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--line);
+    transition:background 0.3s ease;
+  }
+  .tl-item.in-view .tl-dot{ border-color:var(--violet); background:var(--white); }
+  .tl-item.in-view .tl-dot::after{ background:var(--violet); }
+  .tl-item.current .tl-dot{ border-color:var(--teal); }
+  .tl-item.current .tl-dot::after{ background:var(--teal); }
+
+  .tl-meta{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .tl-card{
+    position:relative;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(16px);
+    transition:opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+  .tl-item.in-view .tl-card{ opacity:1; transform:translateY(0); }
+  .tl-card:hover{
+    border-color:var(--accent, var(--violet));
+    box-shadow:0 26px 54px -28px var(--accent-shadow, rgba(140,123,250,0.5));
+    transform:translateY(-5px);
+  }
+  .tl-card-bar{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:12px 18px;
+    background:var(--bg-alt);
+    border-bottom:1px solid var(--line);
+  }
+  .tl-card-bar .tdot{ width:9px; height:9px; }
+  .tl-card-filename{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--accent, var(--ink-soft));
+    margin-left:5px;
+    transition:color 0.3s ease;
+  }
+  .tl-card-body{ padding:26px 28px 22px; }
+  .tl-card h3{
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .tl-card p{
+    color:var(--ink-soft);
+    font-size:0.97rem;
+    margin-bottom:18px;
+  }
+  .wa-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--teal);
+    background:rgba(47,217,138,0.09);
+    border:1px solid rgba(47,217,138,0.25);
+    padding:5px 11px;
+    border-radius:100px;
+    margin-bottom:16px;
+  }
+  .tl-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:20px;
+  }
+  .tl-tag{
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    background:var(--bg-alt);
+    padding:5px 10px;
+    border-radius:6px;
+  }
+  .tl-links{
+    display:flex;
+    gap:16px;
+    font-size:0.88rem;
+    font-weight:600;
+  }
+  .tl-links a{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--ink);
+    border-bottom:1.5px solid var(--ink);
+    padding-bottom:2px;
+    transition:color 0.2s ease, border-color 0.2s ease;
+  }
+  .tl-links a:hover{ color:var(--accent, var(--violet)); border-color:var(--accent, var(--violet)); }
+  .tl-links .soon{
+    color:var(--ink-soft);
+    border-bottom:1.5px dashed var(--line);
+  }
+  .tl-card-status{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px 12px;
+    padding:11px 28px;
+    border-top:1px solid var(--line);
+    background:var(--bg-alt);
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--ink-soft);
+  }
+  .tl-card-status .branch{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .tl-card-status .branch-dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--accent, var(--violet));
+    flex-shrink:0;
+  }
+  .tl-card-status .stack{
+    white-space:nowrap;
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    border:1px solid var(--line);
+    border-radius:24px;
+    margin:0 auto;
+    max-width:1120px;
+    overflow:hidden;
+    box-shadow:0 40px 80px -40px rgba(0,0,0,0.5);
+  }
+  .contact-bar{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:10px 20px;
+    background:var(--panel);
+    border-bottom:1px solid var(--line);
+  }
+  .contact-bar .tdot{ width:9px; height:9px; }
+  .contact-bar-title{
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    color:var(--ink-soft);
+    margin-left:5px;
+  }
+  .contact-body{
+    background:
+      radial-gradient(520px 320px at 15% 0%, rgba(156,140,255,0.16), transparent 65%),
+      radial-gradient(480px 300px at 100% 100%, rgba(255,130,97,0.12), transparent 65%),
+      linear-gradient(180deg, var(--bg-alt), var(--panel));
+    color:var(--ink);
+    padding:40px 48px;
+    text-align:center;
+  }
+  .contact-footer-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 20px;
+    background:var(--panel);
+    border-top:1px solid var(--line);
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    color:var(--ink-soft);
+  }
+  .contact-footer-bar .branch{
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .contact-footer-bar .branch-dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--teal);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  .contact .section-tag{ color:var(--coral); }
+  .contact h2{
+    font-family:var(--font-display);
+    font-size:clamp(1.8rem, 3.6vw, 2.5rem);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin-bottom:20px;
+  }
+  .contact p{
+    color:#B8B6C9;
+    max-width:460px;
+    margin:0 auto 36px;
+    font-size:1.02rem;
+  }
+  .contact-lead{
+    color:#B8B6C9;
+    max-width:460px;
+    margin:0 auto 22px;
+    font-size:1.02rem;
+  }
+
+  .cmdk{
+    max-width:480px;
+    margin:0 auto;
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.55);
+    text-align:left;
+    overflow:hidden;
+  }
+  .cmdk-input-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+  }
+  .cmdk-icon{ color:var(--ink-soft); font-size:0.95rem; }
+  .cmdk-input{
+    flex:1;
+    min-width:0;
+    background:none;
+    border:none;
+    outline:none;
+    color:var(--ink);
+    font-family:var(--font-mono);
+    font-size:0.86rem;
+  }
+  .cmdk-input::placeholder{ color:var(--ink-soft); }
+  .cmdk-kbd{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:2px 7px;
+    flex-shrink:0;
+  }
+  .cmdk-divider{ height:1px; background:var(--line); }
+  .cmdk-list{
+    padding:6px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+  }
+  .cmdk-item{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 10px;
+    border-radius:9px;
+    transition:background 0.15s ease;
+  }
+  .cmdk-item:hover{ background:var(--bg-alt); }
+  .cmdk-item-icon{
+    width:24px; height:24px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:0.64rem;
+    flex-shrink:0;
+  }
+  .cmdk-item-label{
+    flex:1;
+    font-size:0.88rem;
+    font-weight:500;
+    color:var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .cmdk-item-arrow{
+    color:var(--ink-soft);
+    transition:transform 0.2s ease, color 0.2s ease;
+    flex-shrink:0;
+  }
+  .cmdk-item:hover .cmdk-item-arrow{ transform:translateX(3px); color:var(--ink); }
+  @media (max-width: 420px){
+    .cmdk-list{ grid-template-columns:1fr; }
+  }
+  .cmdk-empty{
+    display:none;
+    padding:22px 16px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.88rem;
+    border-top:1px solid var(--line);
+  }
+  .cmdk-empty a{ color:var(--violet); }
+  .cmdk-empty.show{ display:block; }
+
+  footer{
+    padding:0 32px 27px;
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    #home.hero{ grid-template-columns:1fr; padding-top:116px; }
+    .about-grid{ grid-template-columns:1fr; gap:44px; }
+    .nav-links{
+      position:fixed;
+      top:44px; right:0;
+      background:var(--white);
+      flex-direction:column;
+      align-items:flex-start;
+      width:220px;
+      padding:20px 24px;
+      gap:18px;
+      border:1px solid var(--line);
+      border-radius:0 0 0 14px;
+      transform:translateX(100%);
+      transition:transform 0.3s ease;
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .nav-toggle{
+      display:block;
+      font-family:var(--font-mono);
+      background:none;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:8px 12px;
+      font-size:1rem;
+      cursor:pointer;
+    }
+    .contact{ border-radius:18px; }
+    .contact-body{ padding:32px 20px; }
+    .contact-bar{ padding:9px 16px; }
+    .contact-footer-bar{ padding:8px 16px; font-size:0.68rem; }
+  }
+  @media (max-width: 560px){
+    .wrap{ padding:0 20px; }
+    .nav{ padding:7px 20px; }
+    #home.hero{ padding-top:104px; }
+    .cmdk{ max-width:100%; }
+    .tl-card-body{ padding:22px 20px 18px; }
+    .tl-card-status{ padding:10px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-nodes" aria-hidden="true"></canvas>
+
+<header>
+  <nav class="nav">
+    <a href="#home" class="logo">alexa<span>.</span>dev</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#contacto" class="btn-code btn-code-fill nav-cta"><span class="tag-bracket">&lt;/</span><span class="tag-name">Hablemos</span><span class="tag-bracket">&gt;</span></a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section id="home" class="hero wrap">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Disponible para nuevos proyectos</span>
+      <h1>Alexandra Sánchez, convierto <em>IDEAS</em> en productos reales.</h1>
+      <p class="lead">Desarrolladora de Software con más de un año construyendo interfaces y sistemas a la medida — desde menús digitales hasta software de inventario, adaptándome al stack que cada proyecto necesita.</p>
+      <div class="hero-actions">
+        <a href="#proyectos" class="btn-code btn-code-fill">
+          <span class="tag-bracket">&lt;/</span><span class="tag-name">Proyectos</span><span class="tag-bracket">&gt;</span>
+        </a>
+        <a href="https://github.com/Alexa1302" target="_blank" rel="noopener" class="btn-code btn-code-outline">
+          <span class="tag-bracket">&lt;/</span><span class="tag-name">GitHub</span><span class="tag-bracket">&gt;</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="terminal" aria-hidden="true">
+      <div class="terminal-bar">
+        <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+        <span class="terminal-title">alexandra.js</span>
+      </div>
+      <div class="terminal-body" id="typedCode"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="sobre-mi" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Sobre mí</span>
+      <h2>De la Idea al Código Funcional</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-bio">
+        <p>Llevo <strong>más de un año</strong> trabajando como desarrolladora, construyendo productos digitales de principio a fin: desde el diseño de la interfaz hasta la lógica que hace que un negocio funcione mejor en su día a día.</p>
+        <p>Trabajo con <strong>React en el frontend</strong>, pero también me involucro en la lógica y el backend — bases de datos, paneles de administración, integraciones con WhatsApp — porque <strong>un software solo sirve si resuelve el problema real del negocio</strong>, no solo el de la pantalla.</p>
+        <p>Sigo aprendiendo activamente: pruebas automatizadas, gestión de proyectos y buenas prácticas para escribir software que otros equipos puedan mantener.</p>
+        <div class="mini-terminal">
+          <div class="terminal-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="terminal-title">filosofia.js</span>
+          </div>
+          <div class="mini-terminal-body">
+            <span class="line"><span class="key">function</span> <span class="fn">filosofia</span><span class="punc">() {</span></span>
+            <span class="line indent"><span class="key">return</span> <span class="str">"Transformando Ideas en Soluciones Digitales"</span><span class="punc">;</span></span>
+            <span class="line"><span class="punc">}</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="skills-col">
+        <div class="skill-group">
+          <h3>Frontend</h3>
+          <div class="chips">
+            <span class="chip">React</span>
+            <span class="chip">Redux</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">HTML</span>
+            <span class="chip">CSS</span>
+            <span class="chip">Material UI</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Datos &amp; Diseño</h3>
+          <div class="chips">
+            <span class="chip">MySQL</span>
+            <span class="chip">Figma</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Testing &amp; Calidad</h3>
+          <div class="chips">
+            <span class="chip">Jest</span>
+            <span class="chip">React Testing Library</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <h3>Gestión &amp; Deploy</h3>
+          <div class="chips">
+            <span class="chip">Jira</span>
+            <span class="chip">Vercel</span>
+            <span class="chip">Netlify</span>
+            <span class="chip">Docker</span>
+            <span class="chip">Documentación Técnica</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="proyectos" class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Proyectos</span>
+      <h2>Mi recorrido, proyecto a proyecto.</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-dot"></span>
+        <div class="tl-meta">Proyecto 01 · Primer proyecto</div>
+        <div class="tl-card" style="--accent:#9C8CFF; --accent-shadow:rgba(156,140,255,0.45);">
+          <div class="tl-card-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="tl-card-filename">landing-page.jsx</span>
+          </div>
+          <div class="tl-card-body">
+            <h3>Landing Page — FacSystem Col</h3>
+            <p>Landing page corporativa para <strong>FacSystem Col</strong>, empresa de seguridad electrónica, redes e infraestructura tecnológica. Incluye un catálogo de servicios en acordeón (CCTV, redes, eléctrico, mantenimiento), casos de éxito interactivos con vista "antes / después", carrusel de marcas aliadas (Dahua, Lanpro, Ruijie) y botón de cotización directo por WhatsApp.</p>
+            <div class="tl-tags">
+              <span class="tl-tag">React</span>
+              <span class="tl-tag">CSS</span>
+              <span class="tl-tag">WhatsApp Click-to-Chat</span>
+            </div>
+            <div class="tl-links">
+              <a href="https://www.facsystemcol.com/" target="_blank" rel="noopener">Ver sitio ↗</a>
+            </div>
+          </div>
+          <div class="tl-card-status">
+            <span class="branch"><span class="branch-dot"></span>main</span>
+            <span class="stack">Producción</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot"></span>
+        <div class="tl-meta">Proyecto 02</div>
+        <div class="tl-card" style="--accent:#34D399; --accent-shadow:rgba(52,211,153,0.4);">
+          <div class="tl-card-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="tl-card-filename">menu-digital.jsx</span>
+          </div>
+          <div class="tl-card-body">
+            <h3>Menú La Neta Wey</h3>
+            <p>Menú digital interactivo para <strong>La Neta Wey</strong> (Cúcuta), organizado por categorías (Platos, Entradas, Postres, Bebidas). Permite armar combos con precios escalonados por cantidad, elegir sabores y agregar notas por producto, y gestionar el pedido desde un carrito con selección de mesa, domicilio o recoger — al finalizar, genera el mensaje con el pedido completo listo para enviar por WhatsApp al restaurante.</p>
+            <div class="tl-tags">
+              <span class="tl-tag">React</span>
+              <span class="tl-tag">CSS</span>
+              <span class="tl-tag">WhatsApp Click-to-Chat</span>
+            </div>
+            <div class="tl-links">
+              <a href="https://menu-la-neta-wey.vercel.app/" target="_blank" rel="noopener">Ver sitio ↗</a>
+            </div>
+          </div>
+          <div class="tl-card-status">
+            <span class="branch"><span class="branch-dot"></span>main</span>
+            <span class="stack">Producción</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <span class="tl-dot"></span>
+        <div class="tl-meta">Proyecto 03 · El más completo</div>
+        <div class="tl-card" style="--accent:#FF8A65; --accent-shadow:rgba(255,138,101,0.4);">
+          <div class="tl-card-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="tl-card-filename">inventario.jsx</span>
+          </div>
+          <div class="tl-card-body">
+            <h3>Software de Inventario — La Neta Wey</h3>
+            <p>Sistema de inventario a la medida del restaurante: roles y credenciales, panel de administrador, control de gastos y ventas, proyección de inventario para el día siguiente con presupuestos y precios, y generación del mensaje con la lista de insumos a solicitar, lista para enviar a proveedores por WhatsApp.</p>
+            <div class="tl-creds">
+              <div class="tl-creds-label">Prueba el sistema · usuarios demo</div>
+              <div class="tl-creds-code">
+                <span class="line"><span class="key">admin</span><span class="punc">:</span> <span class="str">"ALEXA"</span> <span class="punc">/</span> <span class="str">"12345"</span></span>
+                <span class="line"><span class="key">colaborador</span><span class="punc">:</span> <span class="str">"DEYSON"</span> <span class="punc">// sin clave</span></span>
+              </div>
+            </div>
+            <span class="tl-creds-note">* Demo con datos de prueba, réplica del sistema real usado por el cliente.</span>
+            <div class="tl-tags">
+              <span class="tl-tag">React</span>
+              <span class="tl-tag">CSS</span>
+              <span class="tl-tag">MySQL</span>
+              <span class="tl-tag">WhatsApp Click-to-Chat</span>
+            </div>
+            <div class="tl-links">
+              <a href="https://laneta-wey-demo.vercel.app/" target="_blank" rel="noopener">Ver sitio ↗</a>
+            </div>
+          </div>
+          <div class="tl-card-status">
+            <span class="branch"><span class="branch-dot"></span>main</span>
+            <span class="stack">Demo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item current">
+        <span class="tl-dot"></span>
+        <div class="tl-meta">En desarrollo · Proyecto actual</div>
+        <div class="tl-card" style="--accent:#9C8CFF; --accent-shadow:rgba(156,140,255,0.4);">
+          <div class="tl-card-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="tl-card-filename">nueva-idea.js</span>
+          </div>
+          <div class="tl-card-body">
+            <h3>Nueva Idea en Construcción</h3>
+            <p>Un software integral para restaurantes que reúne en un solo lugar lo que antes construí por separado: gestión de pedidos, control de inventario en tiempo real y seguimiento de tiempos de preparación en cocina, entre otras funciones. La evolución natural de todo lo aprendido con el Menú Digital y el Software de Inventario de La Neta Wey.</p>
+            <div class="tl-links">
+              <span class="soon">Detalles próximamente</span>
+            </div>
+          </div>
+          <div class="tl-card-status">
+            <span class="branch"><span class="branch-dot"></span>feature/nueva-idea</span>
+            <span class="stack">En desarrollo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contacto" class="wrap">
+    <div class="contact">
+      <div class="contact-bar">
+        <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+        <span class="contact-bar-title">contacto.tsx</span>
+      </div>
+      <div class="contact-body">
+      <h2>¿Tienes una idea? Hagámosla realidad.</h2>
+      <div class="cmdk">
+        <div class="cmdk-input-row">
+          <span class="cmdk-icon">⌕</span>
+          <input type="text" class="cmdk-input" id="cmdkInput" placeholder="Busca cómo contactarme…" autocomplete="off" spellcheck="false">
+          <span class="cmdk-kbd">/</span>
+        </div>
+        <div class="cmdk-divider"></div>
+        <div class="cmdk-list" id="cmdkList">
+          <a href="mailto:alexandrasanchezvega1302@gmail.com" class="cmdk-item" data-keywords="email correo mail contacto escribir">
+            <span class="cmdk-item-icon" style="background:rgba(156,140,255,0.14); color:#9C8CFF;">@</span>
+            <span class="cmdk-item-label">Correo</span>
+            <span class="cmdk-item-arrow">→</span>
+          </a>
+          <a href="https://wa.me/573213861228" target="_blank" rel="noopener" class="cmdk-item" data-keywords="whatsapp wa mensaje chat celular telefono">
+            <span class="cmdk-item-icon" style="background:rgba(52,211,153,0.14); color:#34D399;">W</span>
+            <span class="cmdk-item-label">WhatsApp</span>
+            <span class="cmdk-item-arrow">→</span>
+          </a>
+          <a href="https://www.linkedin.com/in/alexandra-s%C3%A1nchez-vega" target="_blank" rel="noopener" class="cmdk-item" data-keywords="linkedin red profesional perfil">
+            <span class="cmdk-item-icon" style="background:rgba(255,138,101,0.14); color:#FF8A65;">in</span>
+            <span class="cmdk-item-label">LinkedIn</span>
+            <span class="cmdk-item-arrow">→</span>
+          </a>
+          <a href="https://github.com/Alexa1302" target="_blank" rel="noopener" class="cmdk-item" data-keywords="github codigo repos perfil proyectos">
+            <span class="cmdk-item-icon" style="background:rgba(156,140,255,0.14); color:#9C8CFF;">&lt;/&gt;</span>
+            <span class="cmdk-item-label">GitHub</span>
+            <span class="cmdk-item-arrow">→</span>
+          </a>
+        </div>
+        <div class="cmdk-empty" id="cmdkEmpty">Sin resultados — pero puedes <a href="mailto:alexandrasanchezvega1302@gmail.com">escribirme igual</a> 👋</div>
+      </div>
+      </div>
+      <div class="contact-footer-bar">
+        <span class="branch"><span class="branch-dot"></span>disponible ahora</span>
+        <span>Respondo en &lt; 24h</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> Alexandra Sánchez — Hecho con React y Mucho Café.
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // glowing node network: few large pulsing nodes, connected by lines
+  (function(){
+    const canvas = document.getElementById('bg-nodes');
+    const ctx = canvas.getContext('2d');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const colors = ['156,140,255', '47,217,138', '255,130,97'];
+    let w, h, nodes, running = true;
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      const count = Math.min(15, Math.max(7, Math.floor((w * h) / 95000)));
+      nodes = Array.from({ length: count }, (_, i) => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16,
+        baseR: Math.random() * 2.5 + 5,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.0009 + Math.random() * 0.0006,
+        c: colors[i % colors.length]
+      }));
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const LINK_DIST = 420;
+
+    function draw(now){
+      ctx.clearRect(0, 0, w, h);
+
+      if(!reduceMotion){
+        nodes.forEach(n => {
+          n.x += n.vx; n.y += n.vy;
+          if(n.x <= 0 || n.x >= w) n.vx *= -1;
+          if(n.y <= 0 || n.y >= h) n.vy *= -1;
+        });
+      }
+
+      for(let i = 0; i < nodes.length; i++){
+        for(let j = i + 1; j < nodes.length; j++){
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < LINK_DIST){
+            const alpha = (1 - dist / LINK_DIST) * 0.28;
+            ctx.strokeStyle = `rgba(${a.c},${alpha})`;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      nodes.forEach(n => {
+        const pulse = reduceMotion ? 0.5 : (Math.sin(now * n.speed + n.phase) + 1) / 2;
+        const r = n.baseR + pulse * 3;
+        const glow = 14 + pulse * 16;
+
+        ctx.save();
+        ctx.shadowBlur = glow;
+        ctx.shadowColor = `rgba(${n.c},0.9)`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${n.c},${0.55 + pulse * 0.35})`;
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    function loop(ts){
+      if(!running) return;
+      draw(ts);
+      requestAnimationFrame(loop);
+    }
+
+    if(reduceMotion){
+      draw(0);
+    } else {
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      const wasRunning = running;
+      running = document.visibilityState === 'visible' && !reduceMotion;
+      if(running && !wasRunning) requestAnimationFrame(loop);
+    });
+  })();
+
+  // contact command palette: live filter + "/" shortcut
+  (function(){
+    const input = document.getElementById('cmdkInput');
+    const empty = document.getElementById('cmdkEmpty');
+    if(!input) return;
+    const items = Array.from(document.querySelectorAll('.cmdk-item'));
+
+    function filterItems(){
+      const q = input.value.trim().toLowerCase();
+      let visible = 0;
+      items.forEach(item => {
+        const kw = item.dataset.keywords || '';
+        const match = q === '' || kw.includes(q);
+        item.style.display = match ? '' : 'none';
+        if(match) visible++;
+      });
+      empty.classList.toggle('show', visible === 0);
+    }
+    input.addEventListener('input', filterItems);
+
+    document.addEventListener('keydown', (e) => {
+      const tag = document.activeElement ? document.activeElement.tagName : '';
+      if(e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA'){
+        e.preventDefault();
+        input.focus();
+      }
+      if(e.key === 'Escape' && document.activeElement === input){
+        input.value = '';
+        filterItems();
+        input.blur();
+      }
+    });
+  })();
+
+  // mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // typewriter hero terminal
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const codeLines = [
+    { text: 'const ', cls: 'key' },
+    { text: 'alexandra ', cls: '' },
+    { text: '= {', cls: 'punc' },
+    { text: '\n  rol: ', cls: 'key' },
+    { text: '"Desarrolladora de Software"', cls: 'str' },
+    { text: ',', cls: 'punc' },
+    { text: '\n  experiencia: ', cls: 'key' },
+    { text: '"+1 año"', cls: 'str' },
+    { text: ',', cls: 'punc' },
+    { text: '\n  stack: ', cls: 'key' },
+    { text: '["React", "Redux", "MySQL"]', cls: 'str' },
+    { text: ',', cls: 'punc' },
+    { text: '\n  filosofia: ', cls: 'key' },
+    { text: '"Transformando Ideas en Soluciones Digitales"', cls: 'str' },
+    { text: ',', cls: 'punc' },
+    { text: '\n};', cls: 'punc' },
+  ];
+
+  const target = document.getElementById('typedCode');
+
+  function renderStatic(){
+    target.innerHTML = codeLines.map(l => `<span class="${l.cls}">${escapeHtml(l.text)}</span>`).join('') + '<span class="caret"></span>';
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  if(reduceMotion){
+    renderStatic();
+  } else {
+    let full = '';
+    const flat = [];
+    codeLines.forEach(l => { for(const ch of l.text) flat.push({ ch, cls: l.cls }); });
+    let i = 0;
+    function typeStep(){
+      if(i > flat.length){
+        setTimeout(() => { target.innerHTML = ''; i = 0; typeStep(); }, 2600);
+        return;
+      }
+      const slice = flat.slice(0, i);
+      let html = '';
+      let curCls = null, buf = '';
+      slice.forEach(item => {
+        if(item.cls !== curCls){
+          if(buf) html += `<span class="${curCls}">${escapeHtml(buf)}</span>`;
+          curCls = item.cls; buf = '';
+        }
+        buf += item.ch;
+      });
+      if(buf) html += `<span class="${curCls}">${escapeHtml(buf)}</span>`;
+      target.innerHTML = html + '<span class="caret"></span>';
+      i++;
+      setTimeout(typeStep, 18);
+    }
+    typeStep();
+  }
+
+  // scroll reveal for timeline
+  const items = document.querySelectorAll('.tl-item');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    items.forEach(item => io.observe(item));
+  } else {
+    items.forEach(item => item.classList.add('in-view'));
+  }
+</script>
+
+</body>
+</html>
